@@ -1,19 +1,6 @@
 import wixData from 'wix-data';
 import * as conf from 'backend/ClickConfig/ClickConfig'
 
-async function updateClicks(current) {
-    /**
-     * Increase the clicks in LinkClicks by 1
-     * @param a number, preferably integer, Current value of clicks
-     */
-    let temp_FIELD_NAME = conf.FIELD_NAME
-    const toUpdate = {
-        "_id": conf.ITEM_NAME,
-        [conf.FIELD_NAME]: current + 1
-    };
-    await wixData.update(conf.COLLECTION, toUpdate, { suppressAuth: true });
-}
-
 export async function testClicks() {
     /**
     * Test whether the link is valid or not and return an object with the
@@ -27,9 +14,12 @@ export async function testClicks() {
     * id - the ID of the text object we want to change
     * text - the text we want to display if the link is no longer valid
     */
-    const ans = await wixData.get(conf.COLLECTION, conf.ITEM_NAME)
-    if (ans.clicks < conf.LIMIT) {
-        updateClicks(ans[conf.FIELD_NAME]);
+    const ans = (await wixData.query(conf.COLLECTION).find()).totalCount;
+    if (ans < conf.LIMIT) {
+        /* Any data inserted (even if it's empty) create a new item, which
+        also log the time it was created. Fixes mutual exclusion.
+        Thanks to Kentin from Devs on Wix for the idea. */
+        wixData.insert(conf.COLLECTION, {}, { suppressAuth: true });
         return {
             answer: true,
             data: conf.TARGET

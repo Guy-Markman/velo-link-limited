@@ -11,7 +11,7 @@ With this code you will be able to limit the amount of people who can access the
 
   **From now on, if you see a name in upper screaming snake case, it refers to the a variable from ClickConfig.js**
 
-3. Create a new **single item collection** `COLLECTION`, set its permissions to `Site Content`.
+3. Create a new **Multiple items collection** `COLLECTION`, and set its permissions to `Site Content`.
 4. Create a number field in it named `FIELD_NAME` and set it to 0,.
 5. Create a new Wix page (you can call it whatever you want), and put the code from [page.js](page.js) in the code editor of this page.
 6. Create a text object with the style that you want and change its id to TEXT_ID.
